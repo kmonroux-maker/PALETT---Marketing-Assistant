@@ -1,0 +1,1940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PALETT Marketing Assistant</title>
+  <style>
+    :root {
+      --bg: #f7f3ee;
+      --paper: #fffaf5;
+      --paper-2: #ffffff;
+      --text: #28221d;
+      --muted: #7a7068;
+      --line: #e7ddd2;
+      --accent: #8f4f3f;
+      --accent-soft: #ead4ca;
+      --brown: #4a3329;
+      --green: #6f7f69;
+      --gold: #b9935a;
+      --danger: #a94332;
+      --shadow: 0 18px 50px rgba(75, 50, 37, 0.10);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(143, 79, 63, 0.12), transparent 32rem),
+        radial-gradient(circle at top right, rgba(185, 147, 90, 0.14), transparent 30rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    a { color: inherit; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 20px;
+      border-right: 1px solid var(--line);
+      background: rgba(255, 250, 245, 0.74);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      padding: 0 8px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f7e3d6, #c77865 45%, #6d3d32);
+      box-shadow: inset 0 0 0 5px rgba(255,255,255,.55);
+    }
+
+    .brand h1 {
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: -0.04em;
+      font-size: 25px;
+      margin: 0;
+      line-height: 1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    nav { display: grid; gap: 8px; }
+
+    .nav-btn {
+      border: 0;
+      background: transparent;
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 16px;
+      text-align: left;
+      font-size: 15px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: var(--accent-soft);
+      color: var(--brown);
+    }
+
+    .sidebar-card {
+      margin-top: 28px;
+      padding: 18px;
+      border-radius: 22px;
+      background: var(--brown);
+      color: #fff6ee;
+      box-shadow: var(--shadow);
+    }
+
+    .sidebar-card strong { display: block; font-size: 14px; margin-bottom: 8px; }
+    .sidebar-card p { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(255, 246, 238, 0.78); }
+
+    main {
+      padding: 34px;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 0.95;
+      letter-spacing: -0.06em;
+      margin: 0;
+      color: var(--brown);
+      max-width: 780px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.55;
+      max-width: 560px;
+      margin-top: 14px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    button, .button {
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 17px;
+      background: var(--brown);
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s ease;
+      font-size: 14px;
+    }
+
+    button:hover, .button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 26px rgba(74, 51, 41, 0.18);
+    }
+
+    .btn-secondary { background: var(--paper-2); color: var(--brown); border: 1px solid var(--line); }
+    .btn-soft { background: var(--accent-soft); color: var(--brown); }
+    .btn-danger { background: #f3ded8; color: var(--danger); }
+
+    .section { display: none; }
+    .section.active { display: block; }
+
+    .grid { display: grid; gap: 18px; }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      background: rgba(255, 250, 245, 0.86);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .stat-card { min-height: 148px; position: relative; overflow: hidden; }
+
+    .stat-card::after {
+      content: "";
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      right: -38px;
+      bottom: -42px;
+      background: var(--accent-soft);
+    }
+
+    .stat-number {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 48px;
+      color: var(--brown);
+      letter-spacing: -0.06em;
+      margin-top: 12px;
+    }
+
+    .card h3 { margin: 0 0 14px; color: var(--brown); font-size: 20px; letter-spacing: -0.03em; }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .muted { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+    .tag {
+      display: inline-flex;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--brown);
+      font-size: 12px;
+      font-weight: 700;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .tag.green { background: #dfe8dc; color: #42543c; }
+    .tag.gold { background: #f1e3c9; color: #75582c; }
+
+    .keyword-groups {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .keyword-group {
+      background: var(--paper-2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+    }
+
+    .keyword-list { display: flex; flex-wrap: wrap; gap: 9px; }
+
+    .keyword {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--brown);
+      padding: 10px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .keyword:hover { background: var(--accent-soft); }
+
+    .search-row { display: flex; gap: 10px; }
+    .search-row input { flex: 1; }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; align-items: center; }
+
+    .chip {
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--brown);
+      padding: 6px 11px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .chip:hover { background: var(--accent-soft); }
+    .chip.fav { background: var(--accent-soft); border-color: var(--accent-soft); }
+
+    form { display: grid; gap: 12px; }
+
+    label { display: grid; gap: 7px; color: var(--brown); font-weight: 700; font-size: 13px; }
+
+    input, select, textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+      border-radius: 14px;
+      padding: 13px 14px;
+      font: inherit;
+      outline: none;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(143, 79, 63, 0.10);
+    }
+
+    textarea { min-height: 92px; resize: vertical; }
+
+    .inspiration-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .inspiration-workspace {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .pin-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fff;
+      border: 1px solid var(--line);
+      box-shadow: 0 12px 30px rgba(75, 50, 37, 0.08);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pin-new-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 3;
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(75, 50, 37, 0.25);
+    }
+
+    .pin-date { font-size: 11px; color: var(--muted); }
+
+    .pin-img {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      object-fit: cover;
+      display: block;
+      background: linear-gradient(135deg, #e7d7cb, #f8f0e8);
+    }
+
+    .pin-img-fallback {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 22px;
+      background: linear-gradient(135deg, #efe2d7, #b98973);
+      color: #fffaf5;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      line-height: 1.1;
+    }
+
+    .pin-img-sub {
+      font-family: Inter, Arial, sans-serif;
+      font-size: 13px;
+      opacity: 0.8;
+      margin-top: 8px;
+    }
+
+    .pin-body { padding: 14px; display: grid; gap: 10px; }
+    .pin-body strong { color: var(--brown); font-size: 14px; }
+    .pin-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .small-btn { padding: 9px 11px; font-size: 12px; }
+
+    .events-list { display: grid; gap: 12px; }
+
+    .event-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 16px;
+      background: #fff;
+    }
+
+    .event-row strong { display: block; color: var(--brown); margin-bottom: 4px; }
+
+    .event-days { text-align: right; min-width: 88px; }
+
+    .event-days span {
+      display: block;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--accent);
+      font-size: 30px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+    }
+
+    .timeline { display: grid; gap: 10px; margin-top: 12px; }
+
+    .alert-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 16px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .empty {
+      border: 1px dashed var(--line);
+      border-radius: 22px;
+      padding: 28px;
+      text-align: center;
+      color: var(--muted);
+      background: rgba(255,255,255,.45);
+      grid-column: 1 / -1;
+    }
+
+    .calendar-layout {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .year-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .month-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+    }
+
+    .month-name {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--brown);
+      font-size: 16px;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .month-days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 3px;
+    }
+
+    .dow {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      padding-bottom: 2px;
+    }
+
+    .day {
+      font-size: 11px;
+      text-align: center;
+      padding: 4px 0;
+      border-radius: 6px;
+      color: var(--text);
+    }
+
+    .day.empty { visibility: hidden; }
+    .day.today { box-shadow: inset 0 0 0 1.5px var(--accent); font-weight: 700; }
+    .day.event { color: #fff; font-weight: 700; cursor: pointer; }
+
+    .year-legend {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .legend-row { display: flex; flex-wrap: wrap; gap: 10px 18px; }
+
+    .legend-item { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--brown); font-weight: 600; cursor: pointer; padding: 4px 6px; border-radius: 10px; transition: 0.15s ease; }
+    .legend-item:hover { background: var(--accent-soft); }
+    .legend-dot { width: 11px; height: 11px; border-radius: 50%; display: inline-block; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(40, 34, 29, 0.45);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 50;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      max-width: 560px;
+      width: 100%;
+      max-height: 86vh;
+      overflow: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-head {
+      padding: 24px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .modal-head h3 {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+      letter-spacing: -0.03em;
+      color: var(--brown);
+      margin: 0 0 6px;
+    }
+
+    .modal-close {
+      background: var(--paper-2);
+      color: var(--brown);
+      border: 1px solid var(--line);
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border-radius: 50%;
+      flex-shrink: 0;
+      font-size: 18px;
+    }
+
+    .modal-body { padding: 18px 24px 24px; display: grid; gap: 18px; }
+
+    .modal-countdown {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 40px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+      color: var(--accent);
+    }
+
+    .modal-section-title {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .idea-list { display: grid; gap: 8px; }
+
+    .idea-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 11px 13px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .idea-row::before { content: "✦"; color: var(--accent); font-size: 13px; line-height: 1.5; }
+
+    .day.off { color: #c4bcb1; }
+    .day.runway { color: #3a2e25; font-weight: 600; cursor: pointer; }
+    .day.next-event { box-shadow: inset 0 0 0 2px var(--brown); }
+
+    .progress-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .progress-track {
+      position: relative;
+      display: flex;
+      height: 16px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #eee4d8;
+    }
+
+    .progress-seg { height: 100%; transition: opacity 0.2s ease; }
+
+    .progress-marker {
+      position: absolute;
+      top: -4px;
+      width: 3px;
+      height: 24px;
+      background: var(--brown);
+      border-radius: 2px;
+      transform: translateX(-1px);
+    }
+
+    .stage-inputs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .stage-inputs input { text-align: center; padding: 8px; }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+    .status-dot.error { background: var(--danger); }
+
+    .footer-note {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border-radius: 20px;
+      background: rgba(255, 250, 245, .76);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 1080px) {
+      .app { grid-template-columns: 1fr; }
+      aside { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+      nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .sidebar-card { display: none; }
+      .grid-3, .grid-2, .keyword-groups, .calendar-layout { grid-template-columns: 1fr; }
+      .year-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .inspiration-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .inspiration-workspace { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      main { padding: 22px; }
+      .topbar { display: grid; }
+      nav { grid-template-columns: 1fr 1fr; }
+      .inspiration-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside>
+      <div class="brand">
+        <div class="brand-mark"></div>
+        <div>
+          <h1>PALETT</h1>
+          <p>Marketing Assistant</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-section="dashboard">⌂ Accueil</button>
+        <button class="nav-btn" data-section="inspirations">◐ Inspirations</button>
+        <button class="nav-btn" data-section="library">♡ Bibliothèque</button>
+        <button class="nav-btn" data-section="calendar">◷ Calendrier</button>
+      </nav>
+
+      <div class="sidebar-card">
+        <strong>Objectif</strong>
+        <p>Un outil simple pour trouver des idées de contenu, organiser l’inspiration et anticiper les temps forts marketing de Palett.</p>
+      </div>
+
+      <div style="margin-top:18px;display:flex;justify-content:center;">
+        <span class="status-pill" id="dbStatus"><span class="status-dot" id="dbDot"></span> <span id="dbStatusText">Connexion…</span></span>
+      </div>
+    </aside>
+
+    <main>
+      <section id="dashboard" class="section active">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Dashboard</div>
+            <h2>Organiser les idées, préparer les temps forts.</h2>
+            <p class="subtitle">Une vue simple pour suivre les inspirations sauvegardées, les prochaines campagnes et les alertes importantes.</p>
+          </div>
+          <div class="actions">
+            <button class="btn-soft" onclick="goTo('inspirations')">Voir les inspirations</button>
+            <button class="btn-secondary" onclick="goToAddEvent()">Ajouter un événement</button>
+          </div>
+        </div>
+
+        <div class="grid grid-3">
+          <div class="card stat-card">
+            <div class="muted">Inspirations sauvegardées</div>
+            <div class="stat-number" id="statSaved">0</div>
+          </div>
+          <div class="card stat-card">
+            <div class="muted">Événements à venir</div>
+            <div class="stat-number" id="statEvents">0</div>
+          </div>
+          <div class="card stat-card">
+            <div class="muted">Alertes actives</div>
+            <div class="stat-number" id="statAlerts">0</div>
+          </div>
+        </div>
+
+        <div class="grid grid-2" style="margin-top:18px;">
+          <div class="card">
+            <div class="card-header">
+              <h3>Dernières inspirations sauvegardées</h3>
+              <button class="small-btn btn-secondary" onclick="goTo('library')">Voir tout</button>
+            </div>
+            <div id="dashboardPins" class="inspiration-grid"></div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3>Prochains événements</h3>
+              <button class="small-btn btn-secondary" onclick="goTo('calendar')">Calendrier</button>
+            </div>
+            <div id="dashboardEvents" class="events-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="inspirations" class="section">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Pinterest inspiration</div>
+            <h2>Explorer l’univers visuel Palett.</h2>
+            <p class="subtitle">Les inspirations trouvées par l’agent apparaissent ici. Garde celles qui te plaisent avec ❤️, elles rejoignent ta bibliothèque.</p>
+          </div>
+          <div class="actions">
+            <button onclick="fetchInspirations()">🔎 Chercher des images</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="search-row">
+            <input id="searchInput" type="text" placeholder="Rechercher : tortoiseshell, lilas, parisian, packaging…" oninput="renderFeed()" onkeydown="if(event.key==='Enter'){event.preventDefault();fetchInspirations();}" />
+            <button onclick="fetchInspirations()">Chercher</button>
+            <button class="btn-secondary" onclick="configureWebhook()" title="Configurer l'agent n8n">⚙︎</button>
+          </div>
+          <div id="keywordChips" class="chips"></div>
+          <div id="feedStatus" class="muted" style="font-size:13px;margin-top:12px;"></div>
+          <div id="feedGrid" class="inspiration-grid" style="margin-top:14px;"></div>
+        </div>
+
+        <div class="card" style="margin-top:18px;">
+          <h3>Ajouter une inspiration manuellement</h3>
+            <form id="inspirationForm">
+              <label>
+                URL du visuel
+                <input id="visuelUrl" type="url" placeholder="https://i.pinimg.com/..." />
+              </label>
+              <label>
+                Lien Pinterest
+                <input id="pinterestUrl" type="url" placeholder="https://www.pinterest.com/pin/..." required />
+              </label>
+              <label>
+                Mot-clé utilisé
+                <input id="keywordInput" type="text" placeholder="quiet luxury" required />
+              </label>
+              <label>
+                Catégorie
+                <select id="categoryInput" required>
+                  <option value="Univers Palett">Univers Palett</option>
+                  <option value="Cheveux">Cheveux</option>
+                  <option value="Lifestyle">Lifestyle</option>
+                  <option value="Réseaux sociaux">Réseaux sociaux</option>
+                  <option value="Packaging">Packaging</option>
+                </select>
+              </label>
+              <label>
+                Note personnelle
+                <textarea id="noteInput" placeholder="Ex : bonne idée pour un reel de lancement..."></textarea>
+              </label>
+              <button type="submit">❤️ Sauvegarder dans la bibliothèque</button>
+            </form>
+        </div>
+      </section>
+
+      <section id="library" class="section">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Bibliothèque</div>
+            <h2>Toutes les inspirations sauvegardées.</h2>
+            <p class="subtitle">Filtre, annote et classe les idées utiles pour les shootings, reels, stories, lancements et packagings.</p>
+          </div>
+          <div class="actions">
+            <select id="filterCategory" onchange="renderLibrary()">
+              <option value="all">Toutes les catégories</option>
+              <option value="Univers Palett">Univers Palett</option>
+              <option value="Cheveux">Cheveux</option>
+              <option value="Lifestyle">Lifestyle</option>
+              <option value="Réseaux sociaux">Réseaux sociaux</option>
+              <option value="Packaging">Packaging</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="libraryGrid" class="inspiration-grid"></div>
+      </section>
+
+      <section id="calendar" class="section">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Calendrier marketing</div>
+            <h2>Anticiper les campagnes importantes.</h2>
+            <p class="subtitle">Les alertes J-60, J-30, J-14 et J-7 sont calculées automatiquement pour chaque événement.</p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px;">
+          <h3>Prochain temps fort</h3>
+          <div id="nextEventProgress"></div>
+        </div>
+
+        <div class="card" style="margin-bottom:18px;">
+          <div class="card-header">
+            <div>
+              <h3>Vue d’ensemble de l’année</h3>
+              <p class="muted" style="margin:0;">Tous les temps forts PALETT &amp; féminins, en un coup d’œil.</p>
+            </div>
+            <div class="actions" style="gap:8px; align-items:center;">
+              <button class="small-btn btn-secondary" onclick="changeYear(-1)">◂</button>
+              <span id="yearLabel" style="font-family:Georgia,serif;font-size:22px;color:var(--brown);min-width:64px;text-align:center;"></span>
+              <button class="small-btn btn-secondary" onclick="changeYear(1)">▸</button>
+            </div>
+          </div>
+          <div id="yearCalendar" class="year-grid"></div>
+          <div id="yearLegend" class="year-legend"></div>
+        </div>
+
+        <div class="calendar-layout">
+          <div class="card">
+            <div class="card-header">
+              <h3>Événements à venir</h3>
+              <button class="btn-secondary small-btn" onclick="resetDefaultEvents()">Réinitialiser événements fixes</button>
+            </div>
+            <div id="calendarEvents" class="events-list"></div>
+          </div>
+
+          <div class="card" id="addEventCard">
+            <h3>Ajouter un événement personnalisé</h3>
+            <form id="eventForm">
+              <label>
+                Nom de l’événement
+                <input id="eventName" type="text" placeholder="Lancement nouvelle couleur" required />
+              </label>
+              <label>
+                Date
+                <input id="eventDate" type="text" inputmode="numeric" placeholder="JJ/MM/AAAA" maxlength="10" oninput="maskDateInput(this)" required />
+              </label>
+              <label>
+                Catégorie
+                <select id="eventType">
+                  <option value="Cadeau">Cadeau</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Femme">Femme</option>
+                  <option value="Lifestyle">Lifestyle</option>
+                </select>
+              </label>
+              <label>
+                Description
+                <textarea id="eventDescription" placeholder="Objectif marketing, idée de campagne, contenus à préparer..."></textarea>
+              </label>
+              <label>
+                Statut
+                <select id="eventStatus">
+                  <option>Non commencé</option>
+                  <option>À préparer</option>
+                  <option>En production</option>
+                  <option>Prêt</option>
+                  <option>Terminé</option>
+                </select>
+              </label>
+              <button type="submit">Ajouter l’événement</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">
+        Les inspirations sont stockées dans <strong>Supabase</strong> (table <code>palett_inspirations</code>) et alimentées par l’agent Pinterest. Les événements du calendrier restent sauvegardés localement dans le navigateur.
+      </div>
+    </main>
+  </div>
+
+  <div class="modal-overlay" id="eventModal" onclick="if(event.target===this)closeEventDetail()">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <div>
+          <div id="modalCategory"></div>
+          <h3 id="modalTitle"></h3>
+          <div class="muted" id="modalDate"></div>
+        </div>
+        <button class="modal-close" onclick="closeEventDetail()" aria-label="Fermer">×</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    /* ----------------------------------------------------------
+       SUPABASE
+    ---------------------------------------------------------- */
+    const SUPABASE_URL = "https://smdnqobajjmchblujpzt.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5vz3R6TowSwWemwDWVDbRA_fROgmT9I";
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let inspirationsCache = [];
+
+    function setDbStatus(ok, text) {
+      document.getElementById("dbStatusText").textContent = text;
+      document.getElementById("dbDot").classList.toggle("error", !ok);
+    }
+
+    async function loadInspirations() {
+      const { data, error } = await sb
+        .from("palett_inspirations")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        console.error(error);
+        setDbStatus(false, "Hors ligne");
+        inspirationsCache = [];
+        return;
+      }
+      inspirationsCache = data || [];
+      setDbStatus(true, "Base connectée");
+    }
+
+    /* ----------------------------------------------------------
+       MOTS-CLÉS
+    ---------------------------------------------------------- */
+    const keywordGroups = {
+      "Univers Palett": ["quiet luxury aesthetic", "clean girl aesthetic", "french girl aesthetic", "neutral beige aesthetic", "old money summer"],
+      "Cheveux": ["claw clip hairstyle half up", "effortless claw clip updo", "tortoiseshell claw clip", "pearl claw clip", "lilac pastel claw clip", "french twist claw clip"],
+      "Lifestyle": ["parisian coffee aesthetic", "riviera summer aesthetic", "neutral self care morning"],
+      "Réseaux sociaux": ["hair accessory flatlay aesthetic", "claw clip product photography", "aesthetic unboxing hair accessory"],
+      "Packaging": ["luxury hair accessory packaging", "premium beige packaging", "acetate hair clip product shot"]
+    };
+
+    /* ----------------------------------------------------------
+       ÉVÉNEMENTS (localStorage)
+    ---------------------------------------------------------- */
+    function nthWeekdayOfMonth(year, month, weekday, n) {
+      const first = new Date(year, month, 1);
+      const offset = (weekday - first.getDay() + 7) % 7;
+      return new Date(year, month, 1 + offset + (n - 1) * 7);
+    }
+
+    function lastWeekdayOfMonth(year, month, weekday) {
+      const last = new Date(year, month + 1, 0);
+      const offset = (last.getDay() - weekday + 7) % 7;
+      return new Date(year, month, last.getDate() - offset);
+    }
+
+    function mothersDayFR(year) { return lastWeekdayOfMonth(year, 4, 0); }
+    function grandmothersDayFR(year) { return nthWeekdayOfMonth(year, 2, 0, 1); } // 1er dimanche de mars
+
+    function blackFriday(year) {
+      const thanksgiving = nthWeekdayOfMonth(year, 10, 4, 4);
+      return new Date(year, 10, thanksgiving.getDate() + 1);
+    }
+
+    const categoryColors = {
+      "Commercial": "#b9935a",
+      "Cadeau": "#8f4f3f",
+      "Femme": "#c2748a",
+      "Lifestyle": "#6f7f69"
+    };
+
+    const defaultEvents = [
+      { name: "Soldes d’hiver", month: 0, day: 7, type: "Commercial", description: "Offres commerciales et contenus conversion." },
+      { name: "Saint-Valentin", month: 1, day: 14, type: "Cadeau", description: "Campagne cadeau, amour, duo, attention élégante." },
+      { name: "Journée des droits des femmes", month: 2, day: 8, type: "Femme", description: "Prise de parole, féminité, valeurs de la marque." },
+      { name: "Fête des Grands-Mères", compute: grandmothersDayFR, type: "Cadeau", description: "Cadeau tendre, transmission, élégance intemporelle." },
+      { name: "Fête des Mères", compute: mothersDayFR, type: "Cadeau", description: "Campagne cadeau, douceur, transmission, rituel beauté." },
+      { name: "Soldes d’été", month: 5, day: 24, type: "Commercial", description: "Offres commerciales et contenus conversion." },
+      { name: "Rentrée", month: 8, day: 1, type: "Lifestyle", description: "Routine, organisation, nouveau départ, accessoires du quotidien." },
+      { name: "Octobre Rose", month: 9, day: 1, type: "Femme", description: "Mois de sensibilisation : élégance solidaire, contenu engagé." },
+      { name: "Black Friday", compute: blackFriday, type: "Commercial", description: "Préparation offre, teasing, urgence, stocks." },
+      { name: "Noël", month: 11, day: 25, type: "Cadeau", description: "Cadeaux, coffrets, élégance, packaging, unboxing." }
+    ];
+
+    const alertTemplates = [
+      { days: 60, label: "J-60", message: "L’événement arrive dans 2 mois." },
+      { days: 30, label: "J-30", message: "Il est temps de préparer les contenus." },
+      { days: 14, label: "J-14", message: "Les contenus devraient être en production." },
+      { days: 7, label: "J-7", message: "Vérifier que tout est prêt." }
+    ];
+
+    function getStored(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+      catch { return fallback; }
+    }
+    function setStored(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+
+    function todayStart() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+
+    function dateToInputValue(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, "0");
+      const d = String(date.getDate()).padStart(2, "0");
+      return `${y}-${m}-${d}`;
+    }
+
+    function getNextEventDate(e) {
+      const today = todayStart();
+      const year = today.getFullYear();
+      let date = e.compute ? e.compute(year) : new Date(year, e.month, e.day);
+      if (date < today) {
+        date = e.compute ? e.compute(year + 1) : new Date(year + 1, e.month, e.day);
+      }
+      return dateToInputValue(date);
+    }
+
+    const DEFAULT_STAGES = [60, 30, 14, 7];
+    const EVENTS_KEY = "palett_events_v2";
+    const SEEDED_KEY = "palett_seeded_years";
+
+    function makeId(extra) {
+      return crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + "-" + (extra || 0);
+    }
+
+    function eventStages(e) {
+      return (e && Array.isArray(e.stages) && e.stages.length === 4) ? e.stages : DEFAULT_STAGES.slice();
+    }
+
+    function defaultEventsForYear(year) {
+      return defaultEvents.map((e, index) => ({
+        id: makeId(index),
+        name: e.name,
+        date: dateToInputValue(e.compute ? e.compute(year) : new Date(year, e.month, e.day)),
+        description: e.description,
+        type: e.type,
+        stages: DEFAULT_STAGES.slice(),
+        status: "Non commencé",
+        isCustom: false
+      }));
+    }
+
+    /* Les événements sont stockés dans Supabase (table palett_events) pour être
+       identiques sur tous les ordinateurs. On garde un cache local synchrone
+       pour que l'affichage reste instantané. */
+    let eventsCache = [];
+
+    function normalizeEventRow(r) {
+      return {
+        id: r.id,
+        name: r.name,
+        date: r.date,
+        type: r.type || "Cadeau",
+        description: r.description || "",
+        status: r.status || "Non commencé",
+        stages: (Array.isArray(r.stages) && r.stages.length === 4) ? r.stages : DEFAULT_STAGES.slice(),
+        isCustom: !!r.is_custom
+      };
+    }
+    function eventToRow(e) {
+      return { name: e.name, date: e.date, type: e.type, description: e.description || "",
+               stages: e.stages || DEFAULT_STAGES.slice(), status: e.status || "Non commencé", is_custom: !!e.isCustom };
+    }
+
+    function getEvents() { return eventsCache.map(e => ({ ...e })); }
+
+    async function loadEvents() {
+      const { data, error } = await sb.from("palett_events").select("*");
+      if (error) { console.warn("loadEvents", error); return; }
+      eventsCache = (data || []).map(normalizeEventRow);
+    }
+
+    async function addEventDB(ev) {
+      const { data, error } = await sb.from("palett_events").insert(eventToRow(ev)).select().single();
+      if (error) { alert("Impossible d’enregistrer l’événement : " + error.message); return null; }
+      const norm = normalizeEventRow(data);
+      eventsCache.push(norm);
+      return norm;
+    }
+
+    async function updateEventDB(id, patch) {
+      const dbPatch = {};
+      if (patch.date !== undefined) dbPatch.date = patch.date;
+      if (patch.stages !== undefined) dbPatch.stages = patch.stages;
+      if (patch.status !== undefined) dbPatch.status = patch.status;
+      if (patch.name !== undefined) dbPatch.name = patch.name;
+      if (patch.description !== undefined) dbPatch.description = patch.description;
+      if (patch.type !== undefined) dbPatch.type = patch.type;
+      const { error } = await sb.from("palett_events").update(dbPatch).eq("id", id);
+      if (error) { alert("Impossible de modifier l’événement : " + error.message); return; }
+      const e = eventsCache.find(x => x.id === id);
+      if (e) Object.assign(e, patch);
+    }
+
+    async function deleteEventDB(id) {
+      const { error } = await sb.from("palett_events").delete().eq("id", id);
+      if (error) { alert("Impossible de supprimer l’événement : " + error.message); return; }
+      eventsCache = eventsCache.filter(x => x.id !== id);
+    }
+
+    /* Migration unique : remonte vers Supabase les événements personnalisés
+       qui n'existaient que dans le navigateur de cet ordinateur. */
+    async function migrateLocalCustomEvents() {
+      if (localStorage.getItem("palett_events_migrated")) return;
+      let local = [];
+      try { local = JSON.parse(localStorage.getItem(EVENTS_KEY)) || []; } catch { local = []; }
+      const customs = (local || []).filter(e => e && e.isCustom && e.name && e.date);
+      for (const e of customs) {
+        const exists = eventsCache.some(x => x.name === e.name && x.date === e.date);
+        if (!exists) {
+          await addEventDB({
+            name: e.name, date: e.date, type: e.type || "Cadeau",
+            description: e.description || "",
+            stages: (Array.isArray(e.stages) && e.stages.length === 4) ? e.stages : DEFAULT_STAGES.slice(),
+            status: e.status || "Non commencé", isCustom: true
+          });
+        }
+      }
+      localStorage.setItem("palett_events_migrated", "1");
+    }
+
+    async function ensureYearSeeded(year) {
+      const hasYear = eventsCache.some(e => !e.isCustom && new Date(e.date + "T00:00:00").getFullYear() === year);
+      if (hasYear) return;
+      const rows = defaultEventsForYear(year).map(eventToRow);
+      const { data, error } = await sb.from("palett_events").insert(rows).select();
+      if (error) { console.warn("seed", error); return; }
+      (data || []).forEach(r => eventsCache.push(normalizeEventRow(r)));
+    }
+
+    function daysUntil(dateStr) {
+      const today = todayStart();
+      const target = new Date(dateStr + "T00:00:00");
+      return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+    }
+
+    function formatDate(dateStr) {
+      return new Date(dateStr + "T00:00:00").toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+    }
+
+    /* Saisie de date au format JJ/MM/AAAA (champ texte maison) */
+    function isoToFr(iso) {
+      if (!iso) return "";
+      const m = String(iso).match(/^(\d{4})-(\d{2})-(\d{2})/);
+      return m ? `${m[3]}/${m[2]}/${m[1]}` : "";
+    }
+    function frToIso(fr) {
+      if (!fr) return "";
+      const m = String(fr).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (!m) return "";
+      const d = parseInt(m[1], 10), mo = parseInt(m[2], 10), y = parseInt(m[3], 10);
+      if (d < 1 || d > 31 || mo < 1 || mo > 12) return "";
+      const iso = `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+      const chk = new Date(iso + "T00:00:00");
+      return (chk.getFullYear() === y && chk.getMonth() === mo - 1 && chk.getDate() === d) ? iso : "";
+    }
+    function maskDateInput(el) {
+      let v = el.value.replace(/[^\d]/g, "").slice(0, 8);
+      if (v.length >= 5) v = v.slice(0, 2) + "/" + v.slice(2, 4) + "/" + v.slice(4);
+      else if (v.length >= 3) v = v.slice(0, 2) + "/" + v.slice(2);
+      el.value = v;
+    }
+
+    /* ----------------------------------------------------------
+       NAVIGATION
+    ---------------------------------------------------------- */
+    function goTo(sectionId) {
+      document.querySelectorAll(".section").forEach(s => s.classList.remove("active"));
+      document.getElementById(sectionId).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.section === sectionId);
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      renderAll();
+    }
+
+    function goToAddEvent() {
+      goTo("calendar");
+      setTimeout(() => {
+        const card = document.getElementById("addEventCard");
+        if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
+        const name = document.getElementById("eventName");
+        if (name) name.focus({ preventScroll: true });
+      }, 120);
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => goTo(btn.dataset.section));
+    });
+
+    /* ----------------------------------------------------------
+       MOTS-CLÉS UI
+    ---------------------------------------------------------- */
+    function tokenize(s) {
+      return (s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").split(/[^a-z0-9]+/).filter(Boolean);
+    }
+
+    // « Ce que tu aimes » : fréquence des mots issus de la bibliothèque (favoris),
+    // ou, à défaut, des mots-clés PALETT par défaut.
+    function tasteFrequency() {
+      const saved = inspirationsCache.filter(p => p.saved);
+      const words = [];
+      if (saved.length) {
+        saved.forEach(p => words.push(...tokenize(p.keyword), ...tokenize(p.category), ...tokenize(p.note)));
+      } else {
+        Object.values(keywordGroups).flat().forEach(k => words.push(...tokenize(k)));
+      }
+      const freq = {};
+      words.forEach(w => { if (w.length > 2) freq[w] = (freq[w] || 0) + 1; });
+      return freq;
+    }
+
+    function tasteScore(item, freq) {
+      const toks = new Set([...tokenize(item.keyword), ...tokenize(item.category), ...tokenize(item.note)]);
+      let s = 0;
+      toks.forEach(t => { if (freq[t]) s += freq[t]; });
+      return s;
+    }
+
+    function setSearch(k) {
+      document.getElementById("searchInput").value = k;
+      renderFeed();
+    }
+
+    function renderChips() {
+      const el = document.getElementById("keywordChips");
+      if (!el) return;
+      const all = Object.values(keywordGroups).flat();
+      const favs = [...new Set(inspirationsCache.filter(p => p.saved).map(p => p.keyword).filter(Boolean))];
+      const chips = [
+        ...favs.map(k => ({ k, fav: true })),
+        ...all.filter(k => !favs.includes(k)).map(k => ({ k, fav: false }))
+      ];
+      el.innerHTML = `<span class="muted" style="font-size:12px;margin-right:4px;">Exemples :</span>`
+        + chips.map(c => `<button class="chip${c.fav ? " fav" : ""}" onclick="setSearch('${c.k.replace(/'/g, "\\'")}')">${c.k}</button>`).join("");
+    }
+
+    function openPinterest(encodedKeyword, category, keyword) {
+      document.getElementById("keywordInput").value = keyword;
+      document.getElementById("categoryInput").value = category;
+      window.open(`https://www.pinterest.com/search/pins/?q=${encodedKeyword}`, "_blank");
+    }
+
+    /* ----------------------------------------------------------
+       AJOUT MANUEL
+    ---------------------------------------------------------- */
+    document.getElementById("inspirationForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const keyword = document.getElementById("keywordInput").value.trim();
+      const row = {
+        image_url: document.getElementById("visuelUrl").value.trim() || null,
+        pin_url: document.getElementById("pinterestUrl").value.trim(),
+        keyword,
+        category: document.getElementById("categoryInput").value,
+        pinterest_search_url: `https://www.pinterest.com/search/pins/?q=${encodeURIComponent(keyword)}`,
+        note: document.getElementById("noteInput").value.trim() || null,
+        source: "manual",
+        saved: true
+      };
+
+      const { error } = await sb.from("palett_inspirations").insert(row);
+      if (error) {
+        if (error.code === "23505") {
+          alert("Ce pin est déjà dans la base.");
+        } else {
+          alert("Erreur lors de la sauvegarde : " + error.message);
+        }
+        return;
+      }
+      document.getElementById("inspirationForm").reset();
+      await loadInspirations();
+      renderAll();
+      goTo("library");
+    });
+
+    /* ----------------------------------------------------------
+       CARTES INSPIRATION
+    ---------------------------------------------------------- */
+    function formatDateTime(s) {
+      const d = new Date(s);
+      if (isNaN(d)) return "";
+      return d.toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    }
+
+    // "Nouveau" = proposé par l'agent il y a moins de 48 h
+    function isNewPin(p) {
+      if (!p.created_at || p.source !== "agent") return false;
+      return (Date.now() - new Date(p.created_at).getTime()) < 48 * 3600 * 1000;
+    }
+
+    function renderPinCard(pin, options = {}) {
+      const fallback = `<div class="pin-img pin-img-fallback"${pin.image_url ? ' style="display:none;"' : ""}>${pin.keyword}<span class="pin-img-sub">${pin.category || "Inspiration"}</span></div>`;
+      const image = pin.image_url
+        ? `<img class="pin-img" src="${pin.image_url}" alt="${pin.keyword}" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" />`
+        : "";
+      const link = pin.pin_url || pin.pinterest_search_url || "#";
+      const badge = isNewPin(pin) ? `<span class="pin-new-badge">✨ Nouveau</span>` : "";
+      const dateLine = pin.created_at ? `<div class="pin-date">Proposé le ${formatDateTime(pin.created_at)}</div>` : "";
+
+      return `
+        <article class="pin-card">
+          ${badge}${image}${fallback}
+          <div class="pin-body">
+            <div>
+              <strong>${pin.keyword}</strong>
+              <div class="muted">${pin.category || ""}</div>
+            </div>
+            ${dateLine}
+            ${pin.note ? `<p class="muted">${pin.note}</p>` : ""}
+            <div class="pin-actions">
+              <a class="button small-btn btn-soft" href="${link}" target="_blank">Ouvrir</a>
+              ${options.canSave ? `<button class="small-btn btn-secondary" onclick="saveInspiration('${pin.id}')">❤️ Sauvegarder</button>` : ""}
+              ${options.canSave ? `<button class="small-btn btn-danger" onclick="dismissInspiration('${pin.id}')">🚫 Ne pas recommander</button>` : ""}
+              ${options.canDelete ? `<button class="small-btn btn-danger" onclick="deleteInspiration('${pin.id}')">Supprimer</button>` : ""}
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function saveInspiration(id) {
+      const { error } = await sb.from("palett_inspirations").update({ saved: true }).eq("id", id);
+      if (error) { alert("Erreur : " + error.message); return; }
+      const item = inspirationsCache.find(p => p.id === id);
+      if (item) item.saved = true;
+      renderAll();
+    }
+
+    async function dismissInspiration(id) {
+      const { error } = await sb.from("palett_inspirations").update({ dismissed: true }).eq("id", id);
+      if (error) { alert("Erreur : " + error.message); return; }
+      const item = inspirationsCache.find(p => p.id === id);
+      if (item) item.dismissed = true;
+      renderAll();
+    }
+
+    async function deleteInspiration(id) {
+      const { error } = await sb.from("palett_inspirations").delete().eq("id", id);
+      if (error) { alert("Erreur : " + error.message); return; }
+      inspirationsCache = inspirationsCache.filter(p => p.id !== id);
+      renderAll();
+    }
+
+    /* ----------------------------------------------------------
+       RENDU
+    ---------------------------------------------------------- */
+    function renderFeed() {
+      const grid = document.getElementById("feedGrid");
+      const status = document.getElementById("feedStatus");
+      const q = (document.getElementById("searchInput")?.value || "").trim();
+      let pins = inspirationsCache.filter(p => !p.saved && !p.dismissed);
+
+      if (q) {
+        const qt = tokenize(q);
+        pins = pins.filter(p => {
+          const hay = (p.keyword + " " + p.category + " " + (p.note || "")).toLowerCase();
+          return qt.every(t => hay.includes(t));
+        });
+      }
+
+      // Tri : du plus récent au plus ancien (date de proposition).
+      pins.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+      const liked = inspirationsCache.filter(p => p.saved).length;
+      if (status) {
+        status.innerHTML = (q ? `${pins.length} image(s) pour « ${q} »` : `${pins.length} inspiration(s) proposée(s)`)
+          + (liked ? ` · triées selon ta bibliothèque (${liked} favori${liked > 1 ? "s" : ""})` : ` · ajoute des favoris ❤️ pour personnaliser le tri`);
+      }
+
+      if (!pins.length) {
+        grid.innerHTML = `<div class="empty">Aucune image ne correspond${q ? ` à « ${q} »` : ""}. Lance « Chercher des images » pour que l’agent en rapporte de nouvelles, ou essaie un autre mot-clé.</div>`;
+        return;
+      }
+      grid.innerHTML = pins.map(pin => renderPinCard(pin, { canSave: true })).join("");
+    }
+
+    /* Réglages partagés (Supabase, table palett_settings) — identiques sur tous les ordinateurs.
+       L'URL du webhook n8n y est stockée ; le localStorage sert de cache de secours. */
+    let webhookUrl = "";
+
+    async function loadSettings() {
+      const { data, error } = await sb.from("palett_settings").select("value").eq("key", "n8n_webhook").maybeSingle();
+      if (!error && data && data.value) {
+        webhookUrl = data.value;
+        localStorage.setItem("palett_n8n_webhook", webhookUrl); // cache de secours
+      } else {
+        // Pas encore dans Supabase : on reprend l'éventuelle URL locale et on la remonte une fois.
+        webhookUrl = localStorage.getItem("palett_n8n_webhook") || "";
+        if (!error && webhookUrl) {
+          await sb.from("palett_settings")
+            .upsert({ key: "n8n_webhook", value: webhookUrl, updated_at: new Date().toISOString() }, { onConflict: "key" });
+        }
+      }
+    }
+
+    async function configureWebhook() {
+      const v = prompt("URL du webhook n8n (POST) qui va chercher les images sur Pinterest.\nElle sera mémorisée pour TOUS tes ordinateurs.\nLaisse vide pour seulement rafraîchir la réserve.", webhookUrl);
+      if (v === null) return;
+      const url = v.trim();
+      const status = document.getElementById("feedStatus");
+      const { error } = await sb.from("palett_settings")
+        .upsert({ key: "n8n_webhook", value: url, updated_at: new Date().toISOString() }, { onConflict: "key" });
+      if (error) { if (status) status.textContent = "Erreur d’enregistrement du réglage : " + error.message; return; }
+      webhookUrl = url;
+      if (url) localStorage.setItem("palett_n8n_webhook", url);
+      else localStorage.removeItem("palett_n8n_webhook");
+      if (status) status.textContent = url ? "Agent n8n configuré ✓ (mémorisé pour tous tes ordinateurs)" : "Agent n8n désactivé (mode réserve).";
+    }
+
+    async function fetchInspirations() {
+      const status = document.getElementById("feedStatus");
+      const hook = webhookUrl;
+
+      if (hook) {
+        const q = (document.getElementById("searchInput")?.value || "").trim();
+        if (status) status.textContent = "L’agent n8n cherche de nouvelles images sur Pinterest… (patiente ~30 s)";
+        try {
+          await fetch(hook, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify({ query: q, source: "palett-site" })
+          });
+        } catch (e) { /* déclenchement en no-cors : on ignore la réponse */ }
+        // L'agent répond tout de suite mais travaille en arrière-plan (Apify + Claude).
+        // On rafraîchit régulièrement jusqu'à ~2,5 min pour voir les images arriver.
+        const before = inspirationsCache.filter(p => !p.saved && !p.dismissed).length;
+        for (let i = 0; i < 30; i++) {
+          await new Promise(r => setTimeout(r, 5000));
+          await loadInspirations();
+          renderChips();
+          renderFeed();
+          const now = inspirationsCache.filter(p => !p.saved && !p.dismissed).length;
+          const sec = (i + 1) * 5;
+          if (now > before) {
+            // De nouvelles images sont arrivées : on enlève le filtre de recherche pour les montrer
+            const si = document.getElementById("searchInput");
+            if (si) si.value = "";
+            renderFeed();
+            if (status) status.textContent = `${now - before} nouvelle(s) image(s) trouvée(s) par l'agent ✨`;
+            break;
+          }
+          if (status) status.textContent = `L'agent cherche… (${sec}s) — les images apparaîtront ici dès qu'il a fini.`;
+        }
+      } else {
+        if (status) status.textContent = "Recherche dans la réserve…";
+        await loadInspirations();
+        renderChips();
+        renderFeed();
+      }
+    }
+
+    function renderLibrary() {
+      const grid = document.getElementById("libraryGrid");
+      const filter = document.getElementById("filterCategory").value;
+      let pins = inspirationsCache.filter(p => p.saved && !p.dismissed);
+      if (filter !== "all") pins = pins.filter(p => p.category === filter);
+      pins.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+      if (!pins.length) {
+        grid.innerHTML = `<div class="empty">Aucune inspiration sauvegardée pour le moment.</div>`;
+        return;
+      }
+      grid.innerHTML = pins.map(pin => renderPinCard(pin, { canDelete: true })).join("");
+    }
+
+    function renderDashboardPins() {
+      const container = document.getElementById("dashboardPins");
+      const pins = inspirationsCache.filter(p => p.saved && !p.dismissed).slice(0, 4);
+      if (!pins.length) {
+        container.innerHTML = `<div class="empty">Sauvegarde tes premières inspirations depuis la page Inspirations.</div>`;
+        return;
+      }
+      container.innerHTML = pins.map(pin => renderPinCard(pin)).join("");
+    }
+
+    /* ----------------------------------------------------------
+       ÉVÉNEMENTS UI
+    ---------------------------------------------------------- */
+    document.getElementById("eventForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const dateVal = frToIso(document.getElementById("eventDate").value);
+      if (!dateVal) { alert("Merci d’entrer une date valide au format JJ/MM/AAAA (ex. 25/12/2026)."); return; }
+      await addEventDB({
+        name: document.getElementById("eventName").value.trim(),
+        date: dateVal,
+        description: document.getElementById("eventDescription").value.trim(),
+        type: document.getElementById("eventType").value,
+        stages: DEFAULT_STAGES.slice(),
+        status: document.getElementById("eventStatus").value,
+        isCustom: true
+      });
+      document.getElementById("eventForm").reset();
+      calendarYear = new Date(dateVal + "T00:00:00").getFullYear();
+      renderAll();
+    });
+
+    function getSortedUpcomingEvents() {
+      return getEvents()
+        .filter(event => daysUntil(event.date) >= 0)
+        .sort((a, b) => new Date(a.date) - new Date(b.date));
+    }
+
+    const STAGE_MESSAGES = [
+      "L’événement arrive dans 2 mois.",
+      "Il est temps de préparer les contenus.",
+      "Les contenus devraient être en production.",
+      "Vérifier que tout est prêt."
+    ];
+
+    function getEventAlerts(event) {
+      const eventDate = new Date(event.date + "T00:00:00");
+      return eventStages(event).map((days, i) => {
+        const alertDate = new Date(eventDate);
+        alertDate.setDate(alertDate.getDate() - days);
+        return { days, label: "J-" + days, message: STAGE_MESSAGES[i] || "", date: dateToInputValue(alertDate), passed: alertDate < todayStart() };
+      });
+    }
+
+    function renderEventRow(event, detailed = false) {
+      const d = daysUntil(event.date);
+      const alerts = getEventAlerts(event);
+      const nextAlert = alerts.find(a => !a.passed);
+
+      return `
+        <div class="event-row">
+          <div>
+            <strong>${event.name}</strong>
+            <div class="muted">${formatDate(event.date)} · ${event.description || "Aucune description"}</div>
+            <div style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+              <span class="tag">${event.status}</span>
+              ${event.isCustom ? `<span class="tag gold">Personnalisé</span>` : `<span class="tag green">Fixe</span>`}
+            </div>
+            ${detailed ? `
+              <div class="timeline">
+                ${alerts.map((alert, i) => `
+                  <div class="alert-row" style="${alert.passed ? "opacity:.5;" : ""}border-left:4px solid ${stageColors[i]};">
+                    <div>
+                      <strong>${alert.label} · ${stageLabels[i]}</strong>
+                      <div class="muted">${alert.message}</div>
+                    </div>
+                    <span class="tag" style="background:${stageColors[i]};color:#3a2e25;">${formatDate(alert.date)}</span>
+                  </div>
+                `).join("")}
+                <div class="pin-actions" style="margin-top:8px;">
+                  <button class="small-btn btn-danger" onclick="deleteEvent('${event.id}')">Supprimer</button>
+                </div>
+              </div>
+            ` : nextAlert ? `
+              <div class="muted" style="margin-top:8px;">Prochaine alerte : ${nextAlert.label} — ${formatDate(nextAlert.date)}</div>
+            ` : ""}
+          </div>
+          <div class="event-days">
+            <span>J-${d}</span>
+            <div class="muted">restants</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDashboardEvents() {
+      const container = document.getElementById("dashboardEvents");
+      const events = getSortedUpcomingEvents().slice(0, 4);
+      if (!events.length) { container.innerHTML = `<div class="empty">Aucun événement à venir.</div>`; return; }
+      container.innerHTML = events.map(event => renderEventRow(event)).join("");
+    }
+
+    function renderCalendarEvents() {
+      const container = document.getElementById("calendarEvents");
+      const events = getSortedUpcomingEvents();
+      if (!events.length) { container.innerHTML = `<div class="empty">Aucun événement à venir.</div>`; return; }
+      container.innerHTML = events.map(event => renderEventRow(event, true)).join("");
+    }
+
+    async function deleteEvent(id) {
+      await deleteEventDB(id);
+      closeEventDetail();
+      renderAll();
+    }
+
+    async function resetDefaultEvents() {
+      const toDelete = eventsCache
+        .filter(e => !e.isCustom && new Date(e.date + "T00:00:00").getFullYear() === calendarYear)
+        .map(e => e.id);
+      if (toDelete.length) {
+        const { error } = await sb.from("palett_events").delete().in("id", toDelete);
+        if (error) { alert("Impossible de réinitialiser : " + error.message); return; }
+        eventsCache = eventsCache.filter(e => !toDelete.includes(e.id));
+      }
+      await ensureYearSeeded(calendarYear);
+      renderAll();
+    }
+
+    function renderStats() {
+      const saved = inspirationsCache.filter(p => p.saved).length;
+      const events = getSortedUpcomingEvents();
+      const activeAlerts = events.flatMap(getEventAlerts).filter(alert => !alert.passed).length;
+      document.getElementById("statSaved").textContent = saved;
+      document.getElementById("statEvents").textContent = events.length;
+      document.getElementById("statAlerts").textContent = activeAlerts;
+    }
+
+    /* ----------------------------------------------------------
+       VUE ANNUELLE
+    ---------------------------------------------------------- */
+    let calendarYear = new Date().getFullYear();
+    const MONTH_NAMES = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    const DOW = ["L","M","M","J","V","S","D"];
+
+    const stageColors = ["#cfe0c8", "#f0deab", "#eeb37e", "#dd8f7e"]; // J-60→30, 30→14, 14→7, 7→0
+    const stageLabels = ["Anticiper", "Préparer", "Production", "Vérifier"];
+    const EVENT_COLOR = "#4a3329"; // couleur unique du jour J
+
+    function eventsInYear(year) {
+      return getEvents()
+        .map(e => ({ ...e, dateObj: new Date(e.date + "T00:00:00") }))
+        .filter(e => e.dateObj.getFullYear() === year)
+        .sort((a, b) => a.dateObj - b.dateObj);
+    }
+
+    function nextUpcomingEvent() {
+      const today = todayStart();
+      return getEvents()
+        .map(e => ({ ...e, dateObj: new Date(e.date + "T00:00:00") }))
+        .filter(e => e.dateObj >= today)
+        .sort((a, b) => a.dateObj - b.dateObj)[0] || null;
+    }
+
+    // Pour un jour donné, renvoie l'événement et l'étape qui le contrôlent (le plus proche gagne).
+    function stageForDay(dayDate, events) {
+      let best = null;
+      for (const ev of events) {
+        const d = Math.round((ev.dateObj - dayDate) / 86400000);
+        if (d < 0) continue;
+        if (d === 0) { if (!best || best.band !== -1) best = { ev, band: -1, d: 0 }; continue; }
+        const s = eventStages(ev); // décroissant
+        if (d <= s[0]) {
+          let band = 0;
+          if (d <= s[3]) band = 3; else if (d <= s[2]) band = 2; else if (d <= s[1]) band = 1; else band = 0;
+          if (!best || (best.band !== -1 && d < best.d)) best = { ev, band, d };
+        }
+      }
+      return best;
+    }
+
+    async function changeYear(delta) {
+      calendarYear += delta;
+      await ensureYearSeeded(calendarYear);
+      renderYearCalendar();
+    }
+
+    function renderYearCalendar() {
+      const year = calendarYear;
+      document.getElementById("yearLabel").textContent = year;
+
+      const events = eventsInYear(year);
+      const next = nextUpcomingEvent();
+      const today = todayStart();
+
+      let html = "";
+      for (let m = 0; m < 12; m++) {
+        const first = new Date(year, m, 1);
+        const lead = (first.getDay() + 6) % 7; // lundi en tête
+        const daysInMonth = new Date(year, m + 1, 0).getDate();
+        let cells = "";
+        for (let i = 0; i < lead; i++) cells += `<div class="day empty"></div>`;
+        for (let d = 1; d <= daysInMonth; d++) {
+          const dayDate = new Date(year, m, d);
+          const isToday = (year === today.getFullYear() && m === today.getMonth() && d === today.getDate());
+          const isPast = dayDate < today;
+          const info = isPast ? null : stageForDay(dayDate, events);
+          if (info && info.band === -1) {
+            const isNext = next && info.ev.id === next.id;
+            cells += `<div class="day event${isNext ? " next-event" : ""}" style="background:${EVENT_COLOR};" title="${info.ev.name}" onclick="openEventDetail('${info.ev.id}')">${d}</div>`;
+          } else if (info) {
+            cells += `<div class="day runway" style="background:${stageColors[info.band]};" title="${stageLabels[info.band]} · ${info.ev.name}" onclick="openEventDetail('${info.ev.id}')">${d}</div>`;
+          } else {
+            cells += `<div class="day off${isToday ? " today" : ""}">${d}</div>`;
+          }
+        }
+        html += `
+          <div class="month-card">
+            <div class="month-name">${MONTH_NAMES[m]}</div>
+            <div class="month-days">
+              ${DOW.map(x => `<div class="dow">${x}</div>`).join("")}
+              ${cells}
+            </div>
+          </div>`;
+      }
+      document.getElementById("yearCalendar").innerHTML = html;
+
+      const ranges = ["J-60 → J-30", "J-30 → J-14", "J-14 → J-7", "J-7 → Jour J"];
+      const stageRow =
+        stageColors.map((c, i) => `<span class="legend-item" style="cursor:default;"><span class="legend-dot" style="background:${c};"></span>${stageLabels[i]} <span class="muted" style="font-size:12px;font-weight:400;">· ${ranges[i]}</span></span>`).join("")
+        + `<span class="legend-item" style="cursor:default;"><span class="legend-dot" style="background:${EVENT_COLOR};"></span>Jour de l’événement</span>`
+        + `<span class="legend-item" style="cursor:default;"><span class="legend-dot" style="background:#c4bcb1;"></span>Jour passé / hors préparation</span>`;
+
+      const eventRow = events.length
+        ? events.map(ev => `<span class="legend-item" onclick="openEventDetail('${ev.id}')"><span class="legend-dot" style="background:${categoryColors[ev.type] || EVENT_COLOR};"></span>${ev.name} <span class="muted" style="font-size:12px;font-weight:400;">· ${ev.dateObj.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" })}</span></span>`).join("")
+        : `<span class="muted">Aucun événement cette année.</span>`;
+
+      document.getElementById("yearLegend").innerHTML =
+        `<div class="legend-row">${stageRow}</div>`
+        + `<div class="modal-section-title" style="margin-top:16px;">Tous les événements (${year})</div>`
+        + `<div class="legend-row">${eventRow}</div>`;
+
+      renderNextEventProgress();
+    }
+
+    function renderNextEventProgress() {
+      const el = document.getElementById("nextEventProgress");
+      if (!el) return;
+      const next = nextUpcomingEvent();
+      if (!next) { el.innerHTML = `<div class="empty">Aucun événement à venir.</div>`; return; }
+
+      const today = todayStart();
+      const days = Math.round((next.dateObj - today) / 86400000);
+      const s = eventStages(next);
+      const total = s[0];
+      const elapsed = Math.min(Math.max(total - days, 0), total);
+      const pct = total > 0 ? (elapsed / total) * 100 : 0;
+
+      let stageIdx = -1;
+      if (days <= s[0]) { if (days <= s[3]) stageIdx = 3; else if (days <= s[2]) stageIdx = 2; else if (days <= s[1]) stageIdx = 1; else stageIdx = 0; }
+
+      const color = categoryColors[next.type] || "#8f4f3f";
+      const durations = [s[0] - s[1], s[1] - s[2], s[2] - s[3], s[3]];
+      const segs = durations.map((dur, i) => `<div class="progress-seg" style="flex:${Math.max(dur, 0.001)};background:${stageColors[i]};${stageIdx === i ? "" : "opacity:.4;"}"></div>`).join("");
+      const stageTxt = stageIdx >= 0
+        ? `Étape actuelle : <strong style="color:var(--brown)">${stageLabels[stageIdx]}</strong> — ${STAGE_MESSAGES[stageIdx]}`
+        : (days > s[0] ? `Préparation pas encore commencée (démarre à J-${s[0]}).` : "");
+
+      el.innerHTML = `
+        <div class="progress-meta">
+          <div>
+            <span class="tag" style="background:${color};color:#fff;">${next.type}</span>
+            <strong style="font-size:18px;color:var(--brown);margin-left:8px;">${next.name}</strong>
+          </div>
+          <div class="muted">${next.dateObj.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" })} · ${days === 0 ? "Aujourd’hui" : "J-" + days}</div>
+        </div>
+        <div class="progress-track">${segs}<div class="progress-marker" style="left:${pct}%;"></div></div>
+        <div class="muted" style="margin-top:10px;">${stageTxt}</div>
+      `;
+    }
+
+    /* Idées de contenu par temps fort */
+    const eventIdeas = {
+      "Soldes d’hiver": ["Teaser des offres en story 3 jours avant", "Mettre en avant 2-3 best-sellers", "Code promo + sentiment d’urgence (stock limité)"],
+      "Soldes d’été": ["Reel « summer edit » des indispensables", "Bundle estival à prix doux", "Rappel fin des soldes en story"],
+      "Saint-Valentin": ["Idée cadeau couple / coffret duo", "Reel romantique aux tons doux", "Guide « le cadeau parfait » en carrousel"],
+      "Journée des droits des femmes": ["Prise de parole sur les valeurs de la marque", "Mettre en lumière des femmes inspirantes", "Message sincère, sans promotion agressive"],
+      "Fête des Grands-Mères": ["Storytelling transmission grand-mère / petite-fille", "Cadeau tendre et intemporel", "Témoignage ou souvenir en story"],
+      "Fête des Mères": ["Coffret cadeau à mettre en avant", "Reel émotion mère-fille", "Guide cadeau en carrousel + date limite de commande"],
+      "Rentrée": ["Routine coiffure rapide du matin", "Organisation / nouveau départ", "Présenter les nouveautés de saison"],
+      "Octobre Rose": ["Édition limitée ou don sur les ventes", "Contenu solidaire et engagé", "Message de sensibilisation sobre"],
+      "Black Friday": ["Teasing J-7 puis J-1", "Offre forte + urgence (24h)", "Rappel des best-sellers avant rupture"],
+      "Noël": ["Coffrets et idées cadeaux", "Mise en avant du packaging / unboxing", "Calendrier des dernières commandes avant Noël"]
+    };
+
+    function openEventDetail(id) {
+      const ev = getEvents().find(e => e.id === id);
+      if (!ev) return;
+      const dateObj = new Date(ev.date + "T00:00:00");
+      const color = categoryColors[ev.type] || "#8f4f3f";
+
+      document.getElementById("modalCategory").innerHTML =
+        `<span class="tag" style="background:${color};color:#fff;">${ev.type}</span>`;
+      document.getElementById("modalTitle").textContent = ev.name;
+      document.getElementById("modalDate").textContent =
+        dateObj.toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", year: "numeric" });
+
+      const today = todayStart();
+      const days = Math.round((dateObj - today) / 86400000);
+      let countdown;
+      if (days > 0) countdown = `J-${days}<span style="font-size:15px;color:var(--muted);font-family:Inter,sans-serif;letter-spacing:0;"> · dans ${days} jour${days > 1 ? "s" : ""}</span>`;
+      else if (days === 0) countdown = `Aujourd’hui !`;
+      else countdown = `<span style="font-size:22px;color:var(--muted);">Déjà passé</span>`;
+
+      const alerts = getEventAlerts(ev);
+      const ideas = eventIdeas[ev.name] || [];
+      const s = eventStages(ev);
+
+      document.getElementById("modalBody").innerHTML = `
+        <div class="modal-countdown">${countdown}</div>
+
+        <div>
+          <div class="modal-section-title">Objectif marketing</div>
+          <p class="muted" style="margin:0;font-size:14px;">${ev.description || "—"}</p>
+        </div>
+
+        <div>
+          <div class="modal-section-title">Quand préparer les contenus</div>
+          <div class="timeline">
+            ${alerts.map((a, i) => `
+              <div class="alert-row" style="${a.passed ? "opacity:.55;" : ""}border-left:4px solid ${stageColors[i]};">
+                <div>
+                  <strong>${a.label} · ${stageLabels[i]}</strong>
+                  <div class="muted">${a.message}</div>
+                </div>
+                <span class="tag" style="background:${stageColors[i]};color:#3a2e25;">${formatDate(a.date)}</span>
+              </div>
+            `).join("")}
+          </div>
+        </div>
+
+        ${ideas.length ? `
+        <div>
+          <div class="modal-section-title">Idées de contenu</div>
+          <div class="idea-list">
+            ${ideas.map(i => `<div class="idea-row">${i}</div>`).join("")}
+          </div>
+        </div>` : ""}
+
+        <div>
+          <div class="modal-section-title">Modifier / déplacer</div>
+          <label style="font-size:12px;">Date de l’événement
+            <input type="text" inputmode="numeric" id="editDate" placeholder="JJ/MM/AAAA" maxlength="10" oninput="maskDateInput(this)" value="${isoToFr(ev.date)}" />
+          </label>
+          <label style="font-size:12px;margin-top:10px;">Étapes (jours avant l’événement)
+            <div class="stage-inputs">
+              ${s.map((v, i) => `<input type="number" min="1" id="editS${i}" value="${v}" title="${stageLabels[i]}" />`).join("")}
+            </div>
+          </label>
+          <div class="pin-actions" style="margin-top:14px;">
+            <button class="small-btn" onclick="saveEventEdit('${ev.id}')">Enregistrer</button>
+            <a class="button small-btn btn-soft" href="https://www.pinterest.com/search/pins/?q=${encodeURIComponent(ev.name)}" target="_blank">Inspirations Pinterest</a>
+            <button class="small-btn btn-danger" onclick="deleteEvent('${ev.id}')">Supprimer</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("eventModal").classList.add("open");
+    }
+
+    async function saveEventEdit(id) {
+      const ev = eventsCache.find(e => e.id === id);
+      if (!ev) return;
+      const rawDate = document.getElementById("editDate").value;
+      const newDate = frToIso(rawDate);
+      if (rawDate.trim() && !newDate) { alert("Date invalide. Format attendu : JJ/MM/AAAA (ex. 25/12/2026)."); return; }
+      const patch = {};
+      if (newDate) patch.date = newDate;
+      const st = [0, 1, 2, 3]
+        .map(i => parseInt(document.getElementById("editS" + i).value, 10))
+        .filter(n => !isNaN(n) && n > 0);
+      if (st.length === 4) { st.sort((a, b) => b - a); patch.stages = st; }
+      await updateEventDB(id, patch);
+      if (newDate) calendarYear = new Date(newDate + "T00:00:00").getFullYear();
+      closeEventDetail();
+      renderAll();
+    }
+
+    function closeEventDetail() {
+      document.getElementById("eventModal").classList.remove("open");
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeEventDetail();
+    });
+
+    function renderAll() {
+      renderStats();
+      renderDashboardPins();
+      renderDashboardEvents();
+      renderChips();
+      renderFeed();
+      renderLibrary();
+      renderCalendarEvents();
+      renderYearCalendar();
+    }
+
+    /* ----------------------------------------------------------
+       INIT
+    ---------------------------------------------------------- */
+    async function init() {
+      await loadSettings();
+      await loadEvents();
+      await migrateLocalCustomEvents();
+      await ensureYearSeeded(new Date().getFullYear());
+      await loadInspirations();
+      renderAll();
+    }
+
+    init();
+  </script>
+</body>
+</html>
